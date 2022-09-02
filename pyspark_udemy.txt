@@ -1,0 +1,40 @@
+sudo apt update -y
+sudo apt upgrade -y
+
+sudo apt install python3-pip -y
+sudo apt install python3-venv -y 
+python -m pip install jupyter
+
+sudo apt install default-jre -y
+java --version
+
+sudo apt install scala -y
+scala -version
+
+python -m pip install py4j
+wget https://archive.apache.org/dist/spark/spark-3.3.0/spark-3.3.0-bin-hadoop3.tgz
+sudo tar -zxvf spark-3.3.0-bin-hadoop3
+cd spark-3.3.0-bin-hadoop3
+cd
+
+python -m pip install findspark
+jupyter notebook --generate-config
+
+cd
+mkdir certs
+cd certs
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout sparkcert.pem -out sparkcert.pem
+sudo chown -R $(whoami) spartcert.pem
+
+
+cd
+vim ~/.jupyter/jupyter_notebook_config.py
+c = get_config()
+c.NotebookApp.certfile = u'/home/ubuntu/certs/sparkcert.pem'
+c.NotebookApp.ip = '*'
+c.NotebookApp.open_browser = False
+c.NotebookApp.port = 8888
+:wq
+
+cd 
+jupyter notebook
